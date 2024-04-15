@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.shadow-custom {
+    box-shadow: 0 4px 6px 0px rgba(0, 0, 0, 0.7), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .shadow-inside {
+    box-shadow: inset 0 0 10px 5px rgba(0, 0, 0, 0.01);
+  }
+  
