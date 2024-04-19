@@ -14,6 +14,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Settings from '../pages/Settings';
 import SidebarProfile from '../pages/SidebarProfile';
+import ProfileEdit from '../pages/ProfileEdit';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,16 @@ const router = createBrowserRouter([
     element: (
       <Protected isSignedIn={Authentication.isSignedIn}>
         <Profile />
+      </Protected>
+    ),
+  },
+  {
+    path: '/profileEdit',
+    element: (
+      <Protected isSignedIn={Authentication.isSignedIn}>
+        <Navbar/>
+        <ProfileEdit />
+        <Footer/>
       </Protected>
     ),
   },

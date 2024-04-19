@@ -12,7 +12,8 @@ const Experiences = ({profileData}) => {
             </div>
             {Array.isArray(profileData.experiences)&& profileData.experiences.map((experience, index) => (
               <div key={index} className='p-6 pt-1 pl-8'>
-                {experience.jobName}
+                  <h1>{experience.jobName}</h1>
+                  <span></span>
               </div>
             ))}
             

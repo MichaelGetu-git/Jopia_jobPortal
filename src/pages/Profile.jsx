@@ -1,19 +1,47 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PersonCard from '../components/Profile/cards/PersonCard'
-import ProfileEdit from '../components/Profile/ProfileEdit'
 import AboutPerson from '../components/Profile/cards/AboutPerson'
 import Experiences from '../components/Profile/cards/Experiences'
 import Educations from '../components/Profile/cards/Educations'
 import Portfolio from '../components/Profile/cards/Portfolio'
+import { useAuth } from '../contexts/AuthProvider'
+import { db } from '../firebase/firebase'
+import { getFirestore, addDoc, collection, setDoc, doc, getDoc,getDocs } from 'firebase/firestore';
 
 const Profile = () => {
 
   const [profileData, setProfiledata] = useState({});
+  const { currentUser } = useAuth();
+  const userId = currentUser ? currentUser.uid : null;   
+
 
   const handleProfileUpdate = (updatedProfile) => {
       setProfiledata(updatedProfile);
   };
 
+  
+  useEffect(()=> {
+    const fetchProfileData = async () => {
+      try {
+        if(!userId) return;
+
+        const userDocRef = doc(db, 'users', userId);
+        const docSnapShot = await getDoc(userDocRef);
+
+        if(docSnapShot.exists()) {
+          const data = docSnapShot.data();
+
+          setProfiledata(data);
+        }
+      } catch(error) {
+        console.error("ERROR", error);
+      }
+    };
+
+    fetchProfileData();
+  }, [userId]);
+
+  
   console.log(profileData);
   return (
     <div className='flex h-[800px]'>
@@ -24,7 +52,7 @@ const Profile = () => {
             </div>
             <div>
             <hr className=''/>
-            <PersonCard onUpdateProfile= {handleProfileUpdate}/>
+            <PersonCard onUpdateProfile= {handleProfileUpdate} profileData={profileData}/>
             <AboutPerson  profileData={profileData}/>   
             <Experiences profileData={profileData}/>
             <Educations profileData={profileData}/>

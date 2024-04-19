@@ -10,7 +10,6 @@ import SearchBarC from '../components/SearchBarC'
 import Tailwind from '../TrainTailwind/Tailwind'
 import JobCard from '../components/JobCard'
 import Jobs from '../components/Jobs'
-import ProfileEdit from '../components/Profile/ProfileEdit'
 import SetupProfile from '../components/popup/SetupProfile'
 
 export const HomePage = () => {
