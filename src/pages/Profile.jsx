@@ -1,25 +1,34 @@
 import React, { useState } from 'react'
-import PersonCard from '../components/PersonCard'
-import ProfileEdit from '../components/ProfileEdit'
-import AboutPerson from '../components/AboutPerson'
+import PersonCard from '../components/Profile/cards/PersonCard'
+import ProfileEdit from '../components/Profile/ProfileEdit'
+import AboutPerson from '../components/Profile/cards/AboutPerson'
+import Experiences from '../components/Profile/cards/Experiences'
+import Educations from '../components/Profile/cards/Educations'
+import Portfolio from '../components/Profile/cards/Portfolio'
 
 const Profile = () => {
 
-  const [personData, setPersonData] = useState({});
-  const handlePersonData = (updatedData) => {
-    setPersonData(updatedData);
-  }
+  const [profileData, setProfiledata] = useState({});
+
+  const handleProfileUpdate = (updatedProfile) => {
+      setProfiledata(updatedProfile);
+  };
+
+  console.log(profileData);
   return (
     <div className='flex h-[800px]'>
        <div className='flex-1 h-screen'>
          <div>
-            <div className='pt-5 text-4xl m-6 pl-8 font-semibold'>
+            <div className='pt-7 text-4xl m-6 pl-36 pr-12 font-semibold'>
               MyProfile
             </div>
-            <hr/>
             <div>
-            <PersonCard onUpdate = {handlePersonData}/>
-            <AboutPerson personData = {personData}/>   
+            <hr className=''/>
+            <PersonCard onUpdateProfile= {handleProfileUpdate}/>
+            <AboutPerson  profileData={profileData}/>   
+            <Experiences profileData={profileData}/>
+            <Educations profileData={profileData}/>
+            <Portfolio profileData={profileData}/>
             </div>
          </div> 
       </div>

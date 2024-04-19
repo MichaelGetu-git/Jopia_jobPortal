@@ -27,7 +27,8 @@ const Signup = () => {
             setIsRegistering(true)
             try {
                 await doCreateUserWithEmailAndPassword(email, password);
-                navigate('/') 
+                navigate('/', {state: {isNewUser: true}}); 
+                
             } catch(error) {
                 setErrorMessage("Error: Can't Signup");
                 setIsRegistering(false);

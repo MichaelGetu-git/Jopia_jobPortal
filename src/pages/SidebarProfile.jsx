@@ -16,6 +16,7 @@ const SidebarProfile = () => {
     const { userLoggedIn } = useAuth();
     const [activeMenuItem, setActiveMenuItem] = useState("Public Profile");
 
+
     const handleMenuItemClick = (title, path, event) => {
         if (title === "Public Profile" || title === "Settings") {
             event.preventDefault();
@@ -35,11 +36,11 @@ const SidebarProfile = () => {
 
     return (
         <div className='p-5 h-screen flex'>
-            <div className='w-80'>
+            <div className='w-100 pt-5'>
                 <div>
                     <h1 className=' text-blue text-5xl font-bold pt-9 pb-2 px-14'>JoPia</h1>
                 </div>
-                <div className='flex gap-x-4 items-left'>
+                <div className='flex gap-x-4 items-left pt-10'>
                     <ul className='text-gray-400'>
                         {MenuItems.map(({ path, title, gap, icon }) => (
                             <li key={title} className={`text-md flex items-left mb-0  ${gap ? "border-t border-gray-300 mt-5" : "mt-2"} hover:bg-[#CCCCF5] hover:text-blue rounded-sm`}>

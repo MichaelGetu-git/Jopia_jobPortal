@@ -2,7 +2,7 @@ import React, {useEffect, useState } from 'react'
 import SearchBar from '../components/SearchBar'
 import Jobs from '../components/Jobs';
 import JobCard from '../components/JobCard';
-import SideBar from '../components/SideBar';
+import SideBar from '../components/SideBar/SideBar';
 import { Link } from 'react-router-dom';
 import { FiChevronRight } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';

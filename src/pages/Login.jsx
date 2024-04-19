@@ -107,7 +107,6 @@ const onGoogleSignIn = async(event) => {
     </div>
     <Footer/>
     </div>
-    
   )
 }
 

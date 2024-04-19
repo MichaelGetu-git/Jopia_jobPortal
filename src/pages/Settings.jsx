@@ -2,7 +2,10 @@ import React from 'react'
 
 const Settings = () => {
   return (
-    <div></div>
+    <div className='flex h-[800px]'>
+      
+
+    </div>
   )
 }
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import SiteMoto from '../components/SiteMoto'
 import SearchBar from '../components/SearchBar'
 import ExploreCategory from '../components/ExploreCategory'
@@ -9,14 +10,19 @@ import SearchBarC from '../components/SearchBarC'
 import Tailwind from '../TrainTailwind/Tailwind'
 import JobCard from '../components/JobCard'
 import Jobs from '../components/Jobs'
+import ProfileEdit from '../components/Profile/ProfileEdit'
+import SetupProfile from '../components/popup/SetupProfile'
 
 export const HomePage = () => {
 
   const[jobs, setJobs] = useState([]);
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState([]);
+  const [editProfileOpen, setEditProfileOpen] = useState(false);
+  const location = useLocation();
+  const isNewUser = location.state && location.state.isNewUser;
   
-
+  
   /**
    * http://localhost:5000/all-jobs
    */
@@ -61,6 +67,20 @@ export const HomePage = () => {
   const result = filteredJobsData(jobs,selectedCategory, query);
   const firstFiveJobs = result.slice(0, 5);
 
+  const [isDisplayed, setIsDisplayed] = useState(false);
+
+
+
+  const togglePopup =() => {
+      setIsDisplayed(!isDisplayed);
+  }
+  useEffect(() => {
+    if (isNewUser) {
+      setIsDisplayed(true);
+    }
+  }, []); 
+
+
   return (
         <div>
         <SiteMoto />
@@ -73,7 +93,7 @@ export const HomePage = () => {
          <ExploreCategory />
         <FeaturedJobs result={firstFiveJobs} />
         <div>
-          {/* Additional content */}
+          {isNewUser && <SetupProfile isNewUser = {isNewUser}/>}
         </div>
       </div>
   )
