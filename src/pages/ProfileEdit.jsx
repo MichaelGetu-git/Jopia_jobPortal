@@ -17,6 +17,8 @@ const ProfileEdit = ({ onUpdateProfile}) => {
       phone: '',
       location: '',
       aboutMe: '',
+      bio: '',
+      currJobLocation: '',
       experiences: [],
       educations: [],
       portfolios: [],
@@ -175,9 +177,21 @@ const ProfileEdit = ({ onUpdateProfile}) => {
               </div>
             </div>
             <div className='flex flex-col lg:flex-row items-center justify-between gap-8'>
+              <div className='lg:w-full w-full'>
+                <label className='block mb-2 text-lg font-semibold'>Personal Bio</label>
+                <input type="text" name='bio'  value={profileData.bio} onChange={handleChange} placeholder='Enter your name' className='block w-full  flex-1 border-1 bg-white py-3 pl-3 text-gray-800 placeholder:text-grey-400
+                focus:outline-none sm:text-sm sm:leading-6'/>
+              </div>
+            </div>
+            <div className='flex flex-col lg:flex-row items-center justify-between gap-8'>
               <div className='lg:w-1/2 w-full'>
                 <label className='block mb-2 text-lg font-semibold'>Phone Number</label>
                 <input type="phone" name='phone'  value={profileData.phone} placeholder='Enter your name' className='block w-full  flex-1 border-1 bg-white py-1.5 pl-3 text-gray-800 placeholder:text-grey-400
+                focus:outline-none sm:text-sm sm:leading-6'/>
+              </div>
+              <div className='lg:w-full w-full'>
+                <label className='block mb-2 text-lg font-semibold'>Current Job Location</label>
+                <input type="text" name='currJobLocation'  value={profileData.currJobLocation} onChange={handleChange} placeholder='Enter your name' className='block w-full  flex-1 border-1 bg-white py-3 pl-3 text-gray-800 placeholder:text-grey-400
                 focus:outline-none sm:text-sm sm:leading-6'/>
               </div>
             </div>
@@ -233,11 +247,12 @@ const ProfileEdit = ({ onUpdateProfile}) => {
                   </div>
                   <div className='lg:w-1/2 w-full'>
                     <label className='block mb-2 text-lg font-semibold'>Description</label>
-                    <input type="Education" name='experience.description'
-                        value={experience.description}
-                        onChange={(e)=> handleExperienceChange(index, 'description', e.target.value)}  
-                        placeholder='Enter the company name'  className='block w-full  flex-1 border-1 bg-white py-1.5 pl-3 text-gray-800 placeholder:text-grey-400
-                        focus:outline-none sm:text-sm sm:leading-6'/>
+                    <textarea name='aboutMe' value={experience.description}
+                            onChange={(e)=> handleExperienceChange(index, 'description', e.target.value)}
+                          className='w-full pl-3 pl-3 py-1.5 focus:outline-none placeholder:text-gray-400' 
+                        rows={6} char
+                      placeholder= "Mollit in laborum tempor Lorem incididunt irure. Aute eu ex ad sunt. Pariatur sint culpa do incididunt eiusmod eiusmod culpa. laborum tempor Lorem incididunt.">
+                  </textarea>
                   </div>
                 </div>
               </div>
@@ -295,11 +310,12 @@ const ProfileEdit = ({ onUpdateProfile}) => {
                   </div>
                   <div className='lg:w-1/2 w-full'>
                     <label className='block mb-2 text-lg font-semibold'>Description</label>
-                    <input type="textArea" name='education.description'
-                        value={education.description}
-                        onChange={(e)=> handleEducationChange(index, 'description', e.target.value)}  
-                        placeholder='Enter the company name'  className='block w-full  flex-1 border-1 bg-white py-1.5 pl-3 text-gray-800 placeholder:text-grey-400
-                        focus:outline-none sm:text-sm sm:leading-6'/>
+                    <textarea name='aboutMe' value={education.description}
+                           onChange={(e)=> handleEducationChange(index, 'description', e.target.value)}
+                          className='w-full pl-3 pl-3 py-1.5 focus:outline-none placeholder:text-gray-400' 
+                        rows={6}
+                      placeholder= "Mollit in laborum tempor Lorem incididunt irure. Aute eu ex ad sunt. Pariatur sint culpa do incididunt eiusmod eiusmod culpa. laborum tempor Lorem incididunt.">
+                  </textarea>
                   </div>
                 </div>
               </div>

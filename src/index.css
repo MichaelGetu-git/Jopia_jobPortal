@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Protest+Revolution&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,5 +9,10 @@
   
   .shadow-inside {
     box-shadow: inset 0 0 10px 5px rgba(0, 0, 0, 0.01);
+  }
+  
+
+  .svg-path:hover path {
+    fill: white;
   }
   

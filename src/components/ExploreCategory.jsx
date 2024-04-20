@@ -5,6 +5,7 @@ import { FiChevronRight } from 'react-icons/fi';
 import JobCard from './JobCard'
 import Jobs from './Jobs';
 import {useNavigate} from 'react-router-dom'
+import arrow from '../img/Category/arrow.svg'
 
 const ExploreCategory = () => {
 
@@ -36,7 +37,7 @@ const ExploreCategory = () => {
         <nav className='flex justify-between mx-auto p-5 pb-0'>
           <Link className=' md:text-3xl sm:text-1xl lg:text-4xl sm:mt-3 font-bold'><span>Explore </span><span className='text-moto'>Category</span></Link>
           <div className='flex lg:mt-3'>
-          <Link to='/allJobs' className='text-blue-600'>show all Jobs</Link><FiChevronRight className='right-0 text-3xl'/>
+          <Link to='/allJobs' className='text-blue'>show all Jobs</Link><img src={arrow} className='w-5 h-5 mt-1'/>
           </div>
         </nav>
       </div>

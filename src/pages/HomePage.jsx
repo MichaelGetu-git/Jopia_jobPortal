@@ -22,13 +22,17 @@ export const HomePage = () => {
   const isNewUser = location.state && location.state.isNewUser;
   
   
+  
   /**
    * http://localhost:5000/all-jobs
    */
   useEffect(()=> {
     fetch("jobs.json").then(result => result.json()).then(data => {
         setJobs(data)
-    })
+    });
+    if (isNewUser) {
+      setIsDisplayed(true);
+    }
   }, []);
 
   const handleInputChange =(event) => {
@@ -73,13 +77,7 @@ export const HomePage = () => {
   const togglePopup =() => {
       setIsDisplayed(!isDisplayed);
   }
-  useEffect(() => {
-    if (isNewUser) {
-      setIsDisplayed(true);
-    }
-  }, []); 
-
-
+  
   return (
         <div>
         <SiteMoto />

@@ -1,18 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { FaBarsStaggered, FaXmark} from "react-icons/fa6";
 import AllJobs from '../pages/AllJobs';
 import { useAuth } from '../contexts/AuthProvider';
 import { doSignOut } from '../firebase/auth';
+import { fetchProfilePic } from '../firebase/personalProfileHandler/FirebaseFunctions';
 
 
 const Navbar = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
+    const [profilePic, setProfilePic] = useState('');
+    const {currentUser} = useAuth();
+    const userId = currentUser ? currentUser.uid : null;
     const { userLoggedIn, signOut} = useAuth();
     const handleMenuToggler = () => {
         setMenuOpen(!isMenuOpen)
     };
+
+    useEffect(()=> {
+        const fetchData = async() => {
+            const profilePic = await fetchProfilePic(userId);
+            setProfilePic(profilePic);
+        };
+        fetchData();
+
+    }, [userId]);
 
     const navbarItems = [
         {path: "/", title: "Home"},
@@ -21,7 +34,7 @@ const Navbar = () => {
         {path: "/myJobs", title: "My Jobs"},
         {path: "/sidebarProfile", title: "Profile"},
 
-    ]
+    ];
   return (
     <header className='max-w-screen-2xl container mx-auto xl:px-20 px-4'>
         <nav className='flex justify-between items-center py-6'>
@@ -42,9 +55,17 @@ const Navbar = () => {
                     ))
                 }
             </ul>
-            <div className='text-base text-primary font-medium space-x-5 hidden lg:block'>
+            <div className='text-base text-primary font-medium space-x-1 hidden lg:block mr-0'>
                 {   userLoggedIn ? (
-                    <button onClick={doSignOut} className='text-white py-2 px-5 bg-blue border rounded'>Sign Out</button>
+                    <div className='flex gap-4'>
+                         <div>
+                            <img src={profilePic} alt="" className='w-14 h-14 rounded-full cursor-pointer'/>
+                        </div>
+                        <div>
+                            <button onClick={doSignOut} className='text-white py-3 px-5 bg-blue border rounded mt-1'>Sign Out</button>
+                        </div>
+                    </div>
+                    
                 ) : (
                     <>
                         <Link to="/login" className='text-blue py-2 px-5 font-normal'>Log in</Link>
