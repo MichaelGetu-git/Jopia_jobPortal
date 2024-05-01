@@ -14,11 +14,9 @@ const ExploreCategory = () => {
   const category = queryparams.get('category');
   const [categoryCounts, setCategoryCounts] = useState({});
  
-  /**
-   * http://localhost:5000/all-jobs
-   */
+ 
   useEffect(()=> {
-    fetch("jobs.json").then(result=>result.json()).then(data => {
+    fetch("http://localhost:5000/all-jobs").then(result=>result.json()).then(data => {
       const counts = {};
 
       data.forEach(job => {

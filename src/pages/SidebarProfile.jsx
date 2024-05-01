@@ -11,6 +11,7 @@ import { doSignOut } from '../firebase/auth';
 import { useAuth } from '../contexts/AuthProvider';
 import Settings from './Settings'; 
 import Profile from './Profile'; 
+import MyJobs from './MyJobs';
 
 const SidebarProfile = () => {
     const { userLoggedIn } = useAuth();
@@ -18,7 +19,7 @@ const SidebarProfile = () => {
 
 
     const handleMenuItemClick = (title, path, event) => {
-        if (title === "Public Profile" || title === "Settings") {
+        if (title === "Public Profile" || title === "Settings" || title === "My Jobs") {
             event.preventDefault();
         }
         setActiveMenuItem(title);
@@ -29,13 +30,14 @@ const SidebarProfile = () => {
         { title: "Dashboard", path: "/", icon: DashboardIcon },
         { title: "My Applications", path: "/myJobs", icon: ApplicationIcon },
         { title: "Find Jobs", path: "/allJobs", icon: FindJobsIcon },
+        { title: "My Jobs", path: "/myJobs", icon: FindJobsIcon},
         { title: "Public Profile", path: "/profile", icon: ProfileIcon },
         { title: "Settings", path: "/settings", gap: true, icon: SettingsIcon },
         { title: "Help Center", path: "/", icon: HelpIcon }
     ];
 
     return (
-        <div className='p-5 h-screen flex'>
+        <div className=' p-5 flex lg:h-[1650px]'>
             <div className='w-100 pt-5'>
                 <div>
                     <h1 className=' text-blue text-5xl font-bold pt-9 pb-2 px-14'>JoPia</h1>
@@ -80,6 +82,7 @@ const SidebarProfile = () => {
             <div className='flex-grow'>
                 {activeMenuItem === "Settings" && <Settings />}
                 {activeMenuItem === "Public Profile" && <Profile />}
+                {activeMenuItem === "My Jobs" && <MyJobs/>}
             </div>
         </div>
     );   

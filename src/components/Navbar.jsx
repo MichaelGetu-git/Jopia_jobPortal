@@ -31,7 +31,6 @@ const Navbar = () => {
         {path: "/", title: "Home"},
         {path: "/allJobs", title: "All Jobs"},
         {path: "/postJobs", title: "Post Jobs"},
-        {path: "/myJobs", title: "My Jobs"},
         {path: "/sidebarProfile", title: "Profile"},
 
     ];
@@ -58,11 +57,11 @@ const Navbar = () => {
             <div className='text-base text-primary font-medium space-x-1 hidden lg:block mr-0'>
                 {   userLoggedIn ? (
                     <div className='flex gap-4'>
-                         <div>
-                            <img src={profilePic} alt="" className='w-14 h-14 rounded-full cursor-pointer'/>
+                        <div>
+                            <button onClick={doSignOut} className='text-white py-2 px-4 mt-1 bg-blue border rounded '>Sign Out</button>
                         </div>
                         <div>
-                            <button onClick={doSignOut} className='text-white py-3 px-5 bg-blue border rounded mt-1'>Sign Out</button>
+                            <Link to={"/sidebarProfile"}><img src={profilePic} alt="" className='w-12 h-12 rounded-full cursor-pointer'/></Link>
                         </div>
                     </div>
                     

@@ -26,11 +26,11 @@ const AllJobs = ({query, handleInputChange}) => {
   };
 
   /**
-   * http://localhost:5000/all-jobs
+   * 
    */
   useEffect(()=> {
     setIsLoading(true);
-    fetch("jobs.json").then(res =>res.json()).then(data => {
+    fetch("http://localhost:5000/all-jobs").then(res =>res.json()).then(data => {
       setAllJobs(data);
       setIsLoading(false);
     })

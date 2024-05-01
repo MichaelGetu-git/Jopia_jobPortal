@@ -1,11 +1,26 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom';
 import { FiCalendar, FiDollarSign, FiMapPin, FiClock } from 'react-icons/fi';
 
 const jobCard = ({data}) => {
 
-  const {companyName,companyLogo, jobTitle,minPrice, maxPrice, salaryType, jobLocation, employmentType, postingDate,description} = data;
+  const {_id,companyName,companyLogo, jobTitle,minPrice, maxPrice, salaryType, jobLocation, employmentType, postingDate,description} = data;
   
+
+  const [jobs, setJobs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+   
+  useEffect(()=> {
+    setIsLoading(true);
+    fetch(`http://localhost:5000/all-jobs`)
+      .then(result => result.json())
+      .then(data => {
+        setJobs(data)
+        setIsLoading(false);
+      })
+  }, []);
+
+  console.log(_id);
   return (
     <div>
       <section className='m-3 border border-gray-300 shadow-custom p-2 cursor-pointer'>
@@ -23,6 +38,9 @@ const jobCard = ({data}) => {
                 <div style ={{ textAlign: 'justify',}}>
                 <p className='text-gray-700'>{description}</p>
                 </div>
+            </div>
+            <div>
+              <button className='py-1.5 px-5 border border-solid-5 rounded:sm text-blue font-bold'><Link to={`/jobs/${data._id}/apply`}>Edit</Link></button> 
             </div>
         </Link>
       </section>

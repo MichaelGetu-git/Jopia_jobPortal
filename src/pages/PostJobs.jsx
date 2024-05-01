@@ -4,6 +4,7 @@ import CreatableSelect from 'react-select/creatable'
 
 const PostJobs = () => {
    const [selectedSkill, setSelectedSkill] = useState(null);
+   const [selectedCatag, setSelectedCatag] = useState(null);
    const {
       register,
       handleSubmit,
@@ -11,11 +12,17 @@ const PostJobs = () => {
       formState: { errors},
    } = useForm ();
 
+   const token = localStorage.getItem('firebaseToken');
+   console.log(token);
    const onSubmit = (data) => {
     data.skills = selectedSkill;
+    data.jobType = selectedCatag;
     fetch("http://localhost:5000/post-job", {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`
+    },
       body: JSON.stringify(data)
     }).then(result => result.json()).then((res)=> {
       console.log(res);
@@ -36,6 +43,17 @@ const PostJobs = () => {
       {value: "Python", label: "Python"},
       {value: "Mysql", label: "Mysql"},
     
+   ]
+
+   const catagOptions = [
+    {value: 'design', label: 'Designing'},
+    {value: 'sales', label: 'Sales'},
+    {value: 'marketing', label: 'Marketing'},
+    {value: 'finance', label: 'Finance'},
+    {value: 'technology', label: 'Technology'},
+    {value: 'engineering', label: 'Engineering'},
+    {value: 'human resources', label: 'Human Resources'},
+    {value: 'bussiness', label: 'Bussiness'}
    ]
 
   return (
@@ -134,9 +152,14 @@ const PostJobs = () => {
           <div className='flex flex-col lg:flex-row items-center justify-between gap-8'>
             <div className='lg:w-full w-full'>
               <label className='block mb-2 text-lg font-semibold'>Job Type</label>
-              <input type="text" placeholder='Design' {...register("jobType")}
+              <CreatableSelect
               className='block w-full  flex-1 border-1 bg-white py-1.5 pl-3 text-gray-800 placeholder:text-grey-400
-              focus:outline-none sm:text-sm sm:leading-6'/>
+              focus:outline-none sm:text-sm sm:leading-6' 
+                  defaultValue={catagOptions} 
+                  onChange={setSelectedCatag} 
+                  options = {catagOptions} 
+                  
+              />
             </div>
           </div>
           <div className='flex flex-col lg:flex-row items-center justify-between gap-8'>
@@ -149,14 +172,6 @@ const PostJobs = () => {
             </div>
           </div>
           
-          <div className='flex flex-col lg:flex-row items-center justify-between gap-8'>
-            <div className='lg:w-full w-full'>
-              <label className='block mb-2 text-lg font-semibold'>Job Poster</label>
-              <input type="email" placeholder='Enter your email' {...register("postedBy")}
-              className='block w-full  flex-1 border-1 bg-white py-1.5 pl-3 text-gray-800 placeholder:text-grey-400
-              focus:outline-none sm:text-sm sm:leading-6'/>
-            </div>
-          </div>
           <input className='block mt-12 px-5 py-2 bg-blue text-white text-white rounded:sm cursor-pointer' type='submit'/>
         </form>
       </div>

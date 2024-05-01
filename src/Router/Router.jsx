@@ -15,6 +15,7 @@ import Footer from '../components/Footer';
 import Settings from '../pages/Settings';
 import SidebarProfile from '../pages/SidebarProfile';
 import ProfileEdit from '../pages/ProfileEdit';
+import ApplyForJobForm from '../pages/ApplyForJobForm';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,7 @@ const router = createBrowserRouter([
     element: (
       <Protected isSignedIn={Authentication.isSignedIn}>
         <SidebarProfile />
+        <Footer/>
       </Protected>
     ),
   },
@@ -68,9 +70,7 @@ const router = createBrowserRouter([
     path: '/myJobs',
     element: (
       <Protected isSignedIn={Authentication.isSignedIn}>
-        <Navbar/>
         <MyJobs />
-        <Footer/>
       </Protected>
     ),
   },
@@ -90,6 +90,16 @@ const router = createBrowserRouter([
         <div>
           <Navbar />
           <AllJobs />
+          <Footer/>
+        </div>
+    ),
+  },
+  {
+    path: '/jobs/:id/apply',
+    element: (
+        <div>
+          <Navbar />
+          <ApplyForJobForm></ApplyForJobForm>
           <Footer/>
         </div>
     ),

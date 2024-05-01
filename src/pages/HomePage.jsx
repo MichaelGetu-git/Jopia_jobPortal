@@ -27,7 +27,7 @@ export const HomePage = () => {
    * http://localhost:5000/all-jobs
    */
   useEffect(()=> {
-    fetch("jobs.json").then(result => result.json()).then(data => {
+    fetch("http://localhost:5000/all-jobs").then(result => result.json()).then(data => {
         setJobs(data)
     });
     if (isNewUser) {
@@ -38,6 +38,12 @@ export const HomePage = () => {
   const handleInputChange =(event) => {
     setQuery(event.target.value)
     console.log(event.target.value);
+  }
+
+  const token = localStorage.getItem('firebaseToken');  // Retrieve the token from storage
+  if (!token) {
+      alert('You are not logged in.');
+      return;
   }
 
 

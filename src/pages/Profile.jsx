@@ -56,7 +56,6 @@ const Profile = () => {
             <AboutPerson  profileData={profileData}/>   
             <Experiences profileData={profileData}/>
             <Educations profileData={profileData}/>
-            <Portfolio profileData={profileData}/>
             </div>
          </div> 
       </div>
