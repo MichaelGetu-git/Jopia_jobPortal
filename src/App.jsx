@@ -13,14 +13,12 @@ function App() {
   return (
     <Router>
     <div>
-      <Navbar />
       <Routes>
         {/* Render routes defined in the router configuration */}
         {router.map((route, index) => (
           <Route key={index} path={route.path} element={route.element} />
         ))}
       </Routes>
-      <Footer />
     </div>
   </Router>
   )
