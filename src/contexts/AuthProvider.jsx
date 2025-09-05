@@ -8,7 +8,12 @@ export function AuthProvider({children}) {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) { setIsSignedIn(true); }
+    const savedUser = localStorage.getItem("user");
+
+    if (token && savedUser) {
+        setCurrentUser(JSON.parse(savedUser));
+        setIsSignedIn(true);
+    }
   }, []);
 
   const signIn = async (email, password) => {
@@ -23,6 +28,7 @@ export function AuthProvider({children}) {
 
       const data = await res.json();
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
       setIsSignedIn(true);
       setCurrentUser(data.user);
       return data;
@@ -34,8 +40,10 @@ export function AuthProvider({children}) {
 
   const signOut = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setIsSignedIn(false);
-    setCurrentUser(null)
+    setCurrentUser(null);
+
   };
 
   return (

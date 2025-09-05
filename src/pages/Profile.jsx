@@ -7,13 +7,16 @@ import Portfolio from '../components/Profile/cards/Portfolio'
 import { useAuth } from '../contexts/AuthProvider'
 import { db } from '../firebase/firebase'
 import { getFirestore, addDoc, collection, setDoc, doc, getDoc,getDocs } from 'firebase/firestore';
+import { getProfile } from '../Router/ApiRoutes'
 
 const Profile = () => {
-
+  
+  const token = localStorage.getItem("token");
+  console.log(token);
   const [profileData, setProfiledata] = useState({});
   const { currentUser } = useAuth();
-  const userId = currentUser ? currentUser.uid : null;   
-
+  const userId = currentUser?.userId ?? null;
+  console.log(userId);
 
   const handleProfileUpdate = (updatedProfile) => {
       setProfiledata(updatedProfile);
@@ -21,27 +24,13 @@ const Profile = () => {
 
   
   useEffect(()=> {
-    const fetchProfileData = async () => {
-      try {
-        if(!userId) return;
+    if (!currentUser?.userId) return;
 
-        const userDocRef = doc(db, 'users', userId);
-        const docSnapShot = await getDoc(userDocRef);
-
-        if(docSnapShot.exists()) {
-          const data = docSnapShot.data();
-
-          setProfiledata(data);
-        }
-      } catch(error) {
-        console.error("ERROR", error);
-      }
-    };
-
-    fetchProfileData();
+    getProfile(currentUser.userId, token)
+      .then(setProfiledata)
+      .catch(console.error)
   }, [userId]);
 
-  
   console.log(profileData);
   return (
     <div className='flex h-[800px]'>
