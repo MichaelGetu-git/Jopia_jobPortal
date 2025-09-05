@@ -14,7 +14,6 @@ function App() {
     <Router>
     <div>
       <Routes>
-        {/* Render routes defined in the router configuration */}
         {router.map((route, index) => (
           <Route key={index} path={route.path} element={route.element} />
         ))}

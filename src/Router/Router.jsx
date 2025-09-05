@@ -3,7 +3,7 @@ import { createBrowserRouter, Route } from 'react-router-dom';
 import { HomePage } from '../pages/HomePage';
 import AllJobs from '../pages/AllJobs';
 import Protected from './Protected';
-import Authentication from './Authentication';
+import { useAuth } from '../contexts/AuthProvider';
 import Profile from '../pages/Profile';
 import UpdateJob from '../pages/UpdateJob';
 import MyJobs from '../pages/MyJobs';
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
   {
     path: '/profile',
     element: (
-      <Protected isSignedIn={Authentication.isSignedIn}>
+      <Protected isSignedIn={useAuth.isSignedIn}>
         <Profile />
       </Protected>
     ),
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
   {
     path: '/profileEdit',
     element: (
-      <Protected isSignedIn={Authentication.isSignedIn}>
+      <Protected isSignedIn={useAuth.isSignedIn}>
         <Navbar/>
         <ProfileEdit />
         <Footer/>
@@ -49,7 +49,7 @@ const router = createBrowserRouter([
   {
     path: '/sidebarProfile',
     element: (
-      <Protected isSignedIn={Authentication.isSignedIn}>
+      <Protected isSignedIn={useAuth.isSignedIn}>
         <SidebarProfile />
         <Footer/>
       </Protected>
@@ -58,7 +58,7 @@ const router = createBrowserRouter([
   {
     path: '/edit-job/:id',
     element: (
-      <Protected isSignedIn={Authentication.isSignedIn}>
+      <Protected isSignedIn={useAuth.isSignedIn}>
         <Navbar/>
         <UpdateJob />
         <Footer/>
@@ -69,7 +69,7 @@ const router = createBrowserRouter([
   {
     path: '/myJobs',
     element: (
-      <Protected isSignedIn={Authentication.isSignedIn}>
+      <Protected isSignedIn={useAuth.isSignedIn}>
         <MyJobs />
       </Protected>
     ),
@@ -77,7 +77,7 @@ const router = createBrowserRouter([
   {
     path: '/postJobs',
     element: (
-      <Protected isSignedIn={Authentication.isSignedIn}>
+      <Protected isSignedIn={useAuth.isSignedIn}>
         <Navbar/>
         <PostJobs />
         <Footer/>
@@ -107,7 +107,7 @@ const router = createBrowserRouter([
   {
     path: '/settings',
     element: (
-      <Protected isSignedIn={Authentication.isSignedIn}>
+      <Protected isSignedIn={useAuth.isSignedIn}>
         <Navbar />
         <Settings />
         <Footer/>

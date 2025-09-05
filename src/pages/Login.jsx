@@ -1,15 +1,14 @@
 import React, { useContext, useState } from 'react'
 import { Link, useNavigate, Navigate } from 'react-router-dom'
-import { doCreateUserWithEmailAndPassword, doSignInWithEmailAndPassword, doSignInWithGoogle } from '../firebase/auth'
-import { useAuth } from '../contexts/AuthProvider'
+
 import Footer from '../components/Footer'
+import { useAuth } from '../contexts/AuthProvider';
 
 
 const Login = () => {
-    
-const { userLoggedIn } = useAuth()
 
 const navigate = useNavigate();
+const { isSignedIn, signIn } = useAuth();
 const [email, setEmail] = useState('')
 const [password, setPassword] = useState('')
 const [isSigningIn, setIsSigningIn] = useState(false)
@@ -28,7 +27,7 @@ const onSubmit = async(event)=> {
    if(!isSigningIn) {
     setIsSigningIn(true)
     try {
-        await doSignInWithEmailAndPassword(email, password);
+        await signIn(email, password);
         navigate('/')
     } catch(error) {
         setErrorMessage("Error: Can't Login");
@@ -58,7 +57,7 @@ const onGoogleSignIn = async(event) => {
                 <a href="" className='font-barrio text-blue text-5xl font-bold justify-left'>JoPia</a>
             </nav>
         </header>
-        {userLoggedIn && (<Navigate to={'/'} replace={true}/>)}
+        {isSignedIn && (<Navigate to={'/'} replace={true}/>)}
         <div className='w-full flex justify-center mt-18 mb-36'>
         <form  onSubmit={onSubmit} className='w-[35%] h-[60%] bg-[] flex-col p-12 rounded shadow-custom'>
             

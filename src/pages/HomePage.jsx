@@ -21,11 +21,6 @@ export const HomePage = () => {
   const location = useLocation();
   const isNewUser = location.state && location.state.isNewUser;
   
-  
-  
-  /**
-   * http://localhost:5000/all-jobs
-   */
   useEffect(()=> {
     fetch("http://localhost:5000/all-jobs").then(result => result.json()).then(data => {
         setJobs(data)

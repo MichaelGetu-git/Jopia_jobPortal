@@ -1,13 +1,12 @@
 import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { doCreateUserWithEmailAndPassword, doSignInWithEmailAndPassword, doSignInWithGoogle } from '../firebase/auth'
-import { useAuth } from '../contexts/AuthProvider'
 import Footer from '../components/Footer'
 
 const Signup = () => {
 
     const navigate = useNavigate();
     const [email, setEmail] = useState('')
+    const [name, setName]  = useState('')
     const [password, setPassword] = useState('')
     const [isRegistering, setIsRegistering] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
@@ -15,7 +14,9 @@ const Signup = () => {
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
     };
-
+    const handleNameChange = (event) => {
+        setName(event.target.value);
+    }
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
     };
@@ -26,9 +27,18 @@ const Signup = () => {
         if(!isRegistering) {
             setIsRegistering(true)
             try {
-                await doCreateUserWithEmailAndPassword(email, password);
+                const res = await fetch("http://localhost:3000/auth/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({name, email, password})
+                });
+                if (!res.ok) throw new Error("Registeration Failed");
+
+                const data = await res.json();
+                localStorage.setItem("token", data.token);
+                setIsRegistering(false);
                 navigate('/', {state: {isNewUser: true}}); 
-                
+                return data;
             } catch(error) {
                 setErrorMessage("Error: Can't Signup");
                 setIsRegistering(false);
@@ -51,6 +61,16 @@ const Signup = () => {
             
             <div className='w-full flex flex-col  p-2 justify-between '>
                 <h3 className='text-2xl font-semibold mb-4'>SignUp</h3>
+                <div className='w-full flex flex-col'>
+                    <label className='relative left-0 text-blue font-semibold'>Full Name</label>
+                    <input type="name"
+                        autoComplete='off'
+                        name='name'
+                        placeholder="Full Name"
+                        onChange={handleNameChange}
+                        className= 'peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900
+                        focus:outline-none focus:border-blue'/>
+                </div>
                 <div className='w-full flex flex-col'>
                     <label className='relative left-0 text-blue font-semibold'>Email Adress</label>
                     <input type="email"

@@ -2,25 +2,20 @@ import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { FaBarsStaggered, FaXmark} from "react-icons/fa6";
-import AllJobs from '../pages/AllJobs';
 import { useAuth } from '../contexts/AuthProvider';
-import { doSignOut } from '../firebase/auth';
-import { fetchProfilePic } from '../firebase/personalProfileHandler/FirebaseFunctions';
 
 
 const Navbar = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const [profilePic, setProfilePic] = useState('');
-    const {currentUser} = useAuth();
+    const {currentUser, isSignedIn, signOut} = useAuth();
     const userId = currentUser ? currentUser.uid : null;
-    const { userLoggedIn, signOut} = useAuth();
     const handleMenuToggler = () => {
         setMenuOpen(!isMenuOpen)
     };
-
     useEffect(()=> {
         const fetchData = async() => {
-            const profilePic = await fetchProfilePic(userId);
+            const profilePic = <div className='w-6 h-6 bg-red-700'></div>
             setProfilePic(profilePic);
         };
         fetchData();
@@ -55,10 +50,10 @@ const Navbar = () => {
                 }
             </ul>
             <div className='text-base text-primary font-medium space-x-1 hidden lg:block mr-0'>
-                {   userLoggedIn ? (
+                {   isSignedIn ? (
                     <div className='flex gap-4'>
                         <div>
-                            <button onClick={doSignOut} className='text-white py-2 px-4 mt-1 bg-blue border rounded '>Sign Out</button>
+                            <button onClick={signOut} className='text-white py-2 px-4 mt-1 bg-blue border rounded '>Sign Out</button>
                         </div>
                         <div>
                             <Link to={"/sidebarProfile"}><img src={profilePic} alt="" className='w-12 h-12 rounded-full cursor-pointer'/></Link>
