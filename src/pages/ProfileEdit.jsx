@@ -3,147 +3,57 @@ import { db } from '../firebase/firebase'
 import { getFirestore, addDoc, collection, setDoc, doc, getDoc,getDocs } from 'firebase/firestore';
 import { useAuth } from '../contexts/AuthProvider';
 import {uploadPortfolio } from '../firebase/personalProfileHandler/FirebaseFunctions'
+import { createProfile } from '../Router/ApiRoutes';
 
 
-const ProfileEdit = ({ onUpdateProfile}) => {
+const ProfileEdit = () => {
 
-
-
+    const token = localStorage.getItem("token");
     const { currentUser } = useAuth();
-    const userId = currentUser ? currentUser.uid : null;   
     const [profileData, setProfileData] = useState({
       name: '',
-      email: '',
       phone: '',
-      location: '',
+      currJobLocation: '',
       aboutMe: '',
       bio: '',
-      currJobLocation: '',
-      experiences: [],
-      educations: [],
-      portfolios: [],
+      coverFile: null,
+      profileFile: null
     });
 
-    useEffect(()=> {
-      const fetchProfileData = async () => {
-        try {
-          if(!userId) return;
-
-          const userDocRef = doc(db, 'users', userId);
-          const docSnapShot = await getDoc(userDocRef);
-
-          if(docSnapShot.exists()) {
-            const data = docSnapShot.data();
-
-            setProfileData(data);
-            onUpdateProfile(data);
-          }
-        } catch(error) {
-          console.error("ERROR", error);
-        }
-      };
-
-      fetchProfileData();
-    }, [userId]);
-
-    const handleChange = (event) => {
-      const {name, value} = event.target;
-      setProfileData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
+    const handleChange = (e) => {
+      const { name, value} = e.target;
+      setProfileData((prev)=> ({...prev, [name]: value }));
     };
 
-    const handleExperienceChange = (index, field, value) => {
-      setProfileData((prevData) => {
-        const updatedExpirences = [...prevData.experiences];
-        updatedExpirences[index][field] = value;
-
-        return {
-          ...prevData,
-          experiences: updatedExpirences,
-        };
-      });
-    };
-
-    const handleEducationChange = (index, field, value) => {
-      setProfileData((prevData)=> {
-        const updatedEducations = [...prevData.educations];
-        updatedEducations[index][field] = value;
-
-        return {
-          ...prevData,
-          educations: updatedEducations,
-        };
-      });
-    };
-
-    const handleAddExperienceChange = (index, field, value) => {
-      setProfileData((prevData) => {
-        const updatedExpirences = Array.isArray(prevData.experiences) ? [...prevData.experiences] : [];
-        const newExperience =  {jobName: '', jobType: '', startYear: '', endYear: '', jobLocation: '', description: ''};
-        updatedExpirences.push(newExperience);
-
-        return {
-          ...prevData,
-          experiences: updatedExpirences,
-        }
-      });
+    const handleFileChange = (e) => {
+      const { name, files } = e.target;
+      setProfileData((prev)=> ({...prev, [name]: files[0]}));
     };
     
-    const handleAddEducationChange = () => {
-      setProfileData((prevData) => {
-        const updatedEducations = Array.isArray(prevData.educations) ? [...prevData.educations] : [];
-        const newEducation = { uniName: '', degreeLevel: '', startYear: '', endYear: '', field: '', description: '' };
-        updatedEducations.push(newEducation);
-    
-        return {
-          ...prevData,
-          educations: updatedEducations,
-        };
-      });
-    };
-    const handlePortfolioChange = (event) => {
-      const file = event.target.files[0];
-      setProfileData((prevData) => {
-        const updatedPortfolios = Array.isArray(prevData.portfolios) ? [...prevData.portfolios] : [];
-        updatedPortfolios.push(file);
-    
-        return {
-          ...prevData,
-          portfolios: updatedPortfolios,
-        };
-      });
-    };
-    
-
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault();
+      const formData = new FormData();
+
+      formData.append("name", profileData.name);
+      formData.append("phone", profileData.phone);
+      formData.append("currJobLocation", profileData.currJobLocation);
+      formData.append("aboutMe", profileData.aboutMe);
+      formData.append("bio", profileData.bio);
+
+      if (profileData.coverFile) {
+        formData.append("coverPicture", profileData.coverFile);
+      }
+
+      if (profileData.profileFile) {
+        formData.append("profilePicture", profileData.profileFile);
+      }
+
       try {
-        const userDocRef = doc(db , 'users', userId);
-        
-        if (profileData.portfolios) {
-          const { portfolios, ...noPortfolios} = profileData;
-
-          const uploadedPortfolios = await uploadPortfolio(userId, profileData.portfolios);
-          const portfolioURLS = uploadedPortfolios.map(portfolio => portfolio.downloadURL);
-
-          const updatedProfileData = { ...noPortfolios, portfolios: portfolioURLS};
-
-          await setDoc(userDocRef, updatedProfileData);
-          alert("profile Updated");
-        }  else {
-          console.error('No portfolios found in profileData');
-          alert("No portfolios found in profileData");
+        createProfile(currentUser.userId, formData, token)
+      } catch (error) {
+        res.status(500).json({ message: error.message})
       }
-
-      } catch(error) {
-        console.error('Error saving user Profile:', error);
-        alert(error);
-      }
-    };
-
-
+    }
 
     return (
       <div className='max-w-screen-2xl container mx-auto xl:px-24 px-4 py-10 flex justify-center'>
@@ -158,23 +68,6 @@ const ProfileEdit = ({ onUpdateProfile}) => {
                 <input type="text" name='name'  value={profileData.name} onChange={handleChange} placeholder='Enter your name' className='block w-full  flex-1 border-1 bg-white py-1.5 pl-3 text-gray-800 placeholder:text-grey-400
                 focus:outline-none sm:text-sm sm:leading-6'/>
               </div>
-              <div className='lg:w-1/2 w-full'>
-                <label className='block mb-2 text-lg font-semibold'>Email Address</label>
-                <input type="email" name='email' value={profileData.email} onChange={handleChange} placeholder='Enter the company name'  className='block w-full  flex-1 border-1 bg-white py-1.5 pl-3 text-gray-800 placeholder:text-grey-400
-                focus:outline-none sm:text-sm sm:leading-6'/>
-              </div>
-            </div>
-            <div className='flex flex-col lg:flex-row items-center justify-between gap-8'>
-              <div className='lg:w-1/2 w-full'>
-                <label className='block mb-2 text-lg font-semibold'>Job Name</label>
-                <input type="text" name='jobName'  value={profileData.jobName} onChange={handleChange} placeholder='Enter your name' className='block w-full  flex-1 border-1 bg-white py-1.5 pl-3 text-gray-800 placeholder:text-grey-400
-                focus:outline-none sm:text-sm sm:leading-6'/>
-              </div>
-              <div className='lg:w-1/2 w-full'>
-                <label className='block mb-2 text-lg font-semibold'>Location</label>
-                <input type="text" name='location' value={profileData.location}  onChange={handleChange} placeholder='Enter the company name'  className='block w-full  flex-1 border-1 bg-white py-1.5 pl-3 text-gray-800 placeholder:text-grey-400
-                focus:outline-none sm:text-sm sm:leading-6'/>
-              </div>
             </div>
             <div className='flex flex-col lg:flex-row items-center justify-between gap-8'>
               <div className='lg:w-full w-full'>
@@ -186,7 +79,7 @@ const ProfileEdit = ({ onUpdateProfile}) => {
             <div className='flex flex-col lg:flex-row items-center justify-between gap-8'>
               <div className='lg:w-1/2 w-full'>
                 <label className='block mb-2 text-lg font-semibold'>Phone Number</label>
-                <input type="phone" name='phone'  value={profileData.phone} placeholder='Enter your name' className='block w-full  flex-1 border-1 bg-white py-1.5 pl-3 text-gray-800 placeholder:text-grey-400
+                <input type="text" name='phone'  value={profileData.phone} onChange={handleChange} placeholder='Enter your name' className='block w-full  flex-1 border-1 bg-white py-3 pl-3 text-gray-800 placeholder:text-grey-400
                 focus:outline-none sm:text-sm sm:leading-6'/>
               </div>
               <div className='lg:w-full w-full'>
@@ -194,7 +87,28 @@ const ProfileEdit = ({ onUpdateProfile}) => {
                 <input type="text" name='currJobLocation'  value={profileData.currJobLocation} onChange={handleChange} placeholder='Enter your name' className='block w-full  flex-1 border-1 bg-white py-3 pl-3 text-gray-800 placeholder:text-grey-400
                 focus:outline-none sm:text-sm sm:leading-6'/>
               </div>
+              
             </div>
+            <div className='w-full'>
+                <label className='block mb-2 text-lg font-semibold'>Profile Cover</label>
+                <input type="file" name='coverFile' accept='image/*'  onChange={handleFileChange} placeholder='Enter the company name'  className='block w-full  flex-1 border-1 bg-white py-1.5 pl-3 text-gray-800 placeholder:text-grey-400
+                focus:outline-none sm:text-sm sm:leading-6'/>
+              </div>
+              <div className='w-full'>
+                <label className='block mb-2 text-lg font-semibold'>Profile Picture</label>
+                <input type="file" name='profilePicture' accept='image/*'  onChange={handleFileChange} placeholder='Enter the company name'  className='block w-full  flex-1 border-1 bg-white py-1.5 pl-3 text-gray-800 placeholder:text-grey-400
+                focus:outline-none sm:text-sm sm:leading-6'/>
+              </div>
+              <div className='lg:w-full w-full'>
+                  <label className='block mb-2 text-lg font-semibold'>About Me</label>
+                  <textarea name='aboutMe' value={profileData.aboutMe} onChange={handleChange} className='w-full pl-3 pl-3 py-1.5 focus:outline-none placeholder:text-gray-400' 
+                        rows={6}
+                      placeholder= "Mollit in laborum tempor Lorem incididunt irure. Aute eu ex ad sunt. Pariatur sint culpa do incididunt eiusmod eiusmod culpa. laborum tempor Lorem incididunt.">
+                  </textarea>
+              </div>
+              
+              {
+                /** 
               <h1 className='text-3xl'>Experience</h1>
               {profileData.experiences && profileData.experiences.map((experience, index)=> (
               <div key={index}>
@@ -320,15 +234,10 @@ const ProfileEdit = ({ onUpdateProfile}) => {
                 </div>
               </div>
               ))}
+                
                <button className='block mt-12 px-5 py-2 bg-white text-blue rounded-sm cursor-pointer border text-bold border-moto border-2' type='button' onClick={handleAddEducationChange}>Add Education</button>
                <div className='flex flex-col lg:flex-row items-center justify-between gap-8'>
-                <div className='lg:w-full w-full'>
-                  <label className='block mb-2 text-lg font-semibold'>About Me</label>
-                  <textarea name='aboutMe' value={profileData.aboutMe} onChange={handleChange} className='w-full pl-3 pl-3 py-1.5 focus:outline-none placeholder:text-gray-400' 
-                        rows={6}
-                      placeholder= "Mollit in laborum tempor Lorem incididunt irure. Aute eu ex ad sunt. Pariatur sint culpa do incididunt eiusmod eiusmod culpa. laborum tempor Lorem incididunt.">
-                  </textarea>
-                </div>
+                
               </div>
                 <div className='flex flex-col lg:flex-row items-center justify-between gap-8'>
                 <div className='lg:w-1/2 w-full'>
@@ -348,6 +257,8 @@ const ProfileEdit = ({ onUpdateProfile}) => {
                   </div>
               </div>
               </div>
+               * **/
+              }
               <div className='flex justify-end'>
                   <input className='block mt-12 px-7 py-2 bg-blue  text-white text-white rounded:sm cursor-pointer' type='submit' />
               </div>
