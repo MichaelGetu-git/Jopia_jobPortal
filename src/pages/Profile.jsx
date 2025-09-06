@@ -22,7 +22,6 @@ const Profile = () => {
       setProfiledata(updatedProfile);
   };
 
-  
   useEffect(()=> {
     if (!currentUser?.userId) return;
 

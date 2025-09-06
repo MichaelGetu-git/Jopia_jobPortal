@@ -3,7 +3,7 @@ import { db } from '../firebase/firebase'
 import { getFirestore, addDoc, collection, setDoc, doc, getDoc,getDocs } from 'firebase/firestore';
 import { useAuth } from '../contexts/AuthProvider';
 import {uploadPortfolio } from '../firebase/personalProfileHandler/FirebaseFunctions'
-import { createProfile } from '../Router/ApiRoutes';
+import { createProfile, getProfile } from '../Router/ApiRoutes';
 
 
 const ProfileEdit = () => {
@@ -20,6 +20,14 @@ const ProfileEdit = () => {
       profileFile: null
     });
 
+    useEffect(() => {
+
+      getProfile(currentUser.userId, token)
+        .then(setProfileData)
+        .catch(console.error)
+    },[]);
+
+    
     const handleChange = (e) => {
       const { name, value} = e.target;
       setProfileData((prev)=> ({...prev, [name]: value }));
@@ -49,7 +57,7 @@ const ProfileEdit = () => {
       }
 
       try {
-        createProfile(currentUser.userId, formData, token)
+        createProfile(currentUser.userId, formData, token);
       } catch (error) {
         res.status(500).json({ message: error.message})
       }
@@ -96,7 +104,7 @@ const ProfileEdit = () => {
               </div>
               <div className='w-full'>
                 <label className='block mb-2 text-lg font-semibold'>Profile Picture</label>
-                <input type="file" name='profilePicture' accept='image/*'  onChange={handleFileChange} placeholder='Enter the company name'  className='block w-full  flex-1 border-1 bg-white py-1.5 pl-3 text-gray-800 placeholder:text-grey-400
+                <input type="file" name='profileFile' accept='image/*'  onChange={handleFileChange} placeholder='Enter the company name'  className='block w-full  flex-1 border-1 bg-white py-1.5 pl-3 text-gray-800 placeholder:text-grey-400
                 focus:outline-none sm:text-sm sm:leading-6'/>
               </div>
               <div className='lg:w-full w-full'>

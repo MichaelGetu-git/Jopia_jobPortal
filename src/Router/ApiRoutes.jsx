@@ -25,3 +25,6 @@ async function request(endpoint, { method = "GET", body, token} = {}) {
 export const getAllJobs = (token) => request("/jobs", { token });
 export const getProfile = (userId, token ) => request(`/profile/${userId}`, {method: "GET", token });
 export const createProfile = (userId, data, token) => request(`/profile/me`, {method: "POST", body: data, token});
+export const updateProfile = (data, token) => request(`/profile/me`, { method: "PUT", body: data, token});
+export const updateProfilePicture = (data, token) => request(`/profile/me/profile-picture`, { method: "PUT", body: data, token});
+export const updateCoverPicture = (data, token) => request(`/profile/me/cover-picture`, { method: "PUT", body: data, token});
